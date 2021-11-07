@@ -70,8 +70,6 @@ def crossover(parent1, parent2):
   p2_fitness = fitness_rows(parent2, True)
   p2_col_fitness = fitness_rows(parent2, False)
   p1_col_fitness = fitness_rows(parent1, False)
-  print(p2_col_fitness)
-  print(p1_col_fitness)
 
   child1 = np.zeros((DIM,DIM), dtype=int)
   child2 = np.zeros((DIM,DIM), dtype=int)
