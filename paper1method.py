@@ -173,7 +173,7 @@ parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]
            np.array([3,2,1,9,8,7,6,5,4,]),np.array([2,1,9,8,7,6,5,4,3,]),np.array([1,9,8,7,6,5,4,3,2,])])
 
 ga = modified_pyeasyga.GeneticAlgorithm(
-  seed_data = easy_board,
+  seed_data = hard_board,
   population_size=150,
   generations = 10000,
   crossover_probability = 0.3,
@@ -181,6 +181,7 @@ ga = modified_pyeasyga.GeneticAlgorithm(
   elitism = True,
 )
 ga.tournament_size = 3
+ga.tournament_selection = tourament_selection
 ga.create_individual = generate_initial_boxes
 ga.fitness_function = fitness_for_all
 # ga.selection_function = selection
