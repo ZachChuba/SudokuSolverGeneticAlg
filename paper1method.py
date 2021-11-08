@@ -1,6 +1,7 @@
 # Method from this paper: https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks
 import random
 import modified_pyeasyga
+from operator import attrgetter
 import numpy as np
 import time
 
@@ -8,6 +9,8 @@ import time
 # The first box is top left, the second is middle top, etc.
 DIM = 9
 SQRT_DIM = int(DIM**0.5)
+TOURNAMENT_SIZE = 3
+TOURNAMENT_PROB = .9
 random.seed(time.time())
 easy_board = [0,0,0,8,0,0,0,0,7,3,0,0,0,4,7,0,0,0,8,0,1,0,0,2,3,
 6,0,0,6,0,0,0,8,0,0,2,0,0,5,9,2,4,7,0,0,2,0,0,6,0,0,0,3,0,0,8,4,7,0,0,2,0,1,
@@ -149,8 +152,14 @@ def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3):
       MODIFIABLE_CELLS[i].add(choice)
   # return gene
 
-def selection(population):
-  return random.choice(population)
+def tourament_selection(population):
+  members = random.sample(population, TOURNAMENT_SIZE)
+  members.sort(key=attrgetter('fitness'), reverse=True)
+  rand_draw = random.random()
+  if rand_draw < TOURNAMENT_PROB:
+    return members[0]
+  else:
+    return members[1]
 
 
 
@@ -164,7 +173,7 @@ parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]
            np.array([3,2,1,9,8,7,6,5,4,]),np.array([2,1,9,8,7,6,5,4,3,]),np.array([1,9,8,7,6,5,4,3,2,])])
 
 ga = modified_pyeasyga.GeneticAlgorithm(
-  seed_data = hard_board,
+  seed_data = easy_board,
   population_size=150,
   generations = 10000,
   crossover_probability = 0.3,

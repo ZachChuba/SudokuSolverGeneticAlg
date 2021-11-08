@@ -158,18 +158,27 @@ class GeneticAlgorithm(object):
                 new_child12 = copy.deepcopy(child_1)
                 new_child21 = copy.deepcopy(child_2)
                 new_child22 = copy.deepcopy(child_2)
-                new_child11.fitness, new_child12.fitness, new_child21.fitness, new_child22.fitness = 0, 0, 0, 0
+                new_children = [new_child11, new_child12, new_child21, new_child22]
+                for child in new_children:
+                    child.fitness = self.fitness_function(child.genes)
+                # new_child11.fitness, new_child12.fitness, new_child21.fitness, new_child22.fitness = 0, 0, 0, 0
                 # Each parent mutation spawns 3 children
                 lOfGenes1 = (child_1.genes, new_child11.genes, new_child12.genes)
                 self.mutate_function(lOfGenes1)
+                chosen_child1 = self.tournament_selection([child_1] + new_children[0:2])
                 lOfGenes2 = (child_2.genes, new_child21.genes, new_child22.genes)
                 self.mutate_function(lOfGenes2)
-                children = [child_2, new_child11, new_child12, new_child21, new_child22]
+                chosen_child2 = self.tournament_selection([child_2] + new_children[2:4])
+                # Delete all children not chosen
+                '''
+                for child in [child_1, child_2] + new_children:
+                    if child != chosen_child1 and child != chosen_child2:
+                        del child
+                '''
 
-            new_population.append(child_1)
-            for additional_child in children:
-                if len(new_population) < self.population_size:
-                    new_population.append(additional_child)
+            new_population.append(chosen_child1)
+            if len(new_population) < self.population_size:
+                new_population.append(chosen_child2)
 
         if self.elitism:
             new_population = elites + new_population[int(0.05 * self.population_size):]
@@ -238,3 +247,10 @@ class Chromosome(object):
         """Return initialised Chromosome representation in human readable form.
         """
         return repr((self.fitness, self.genes))
+    
+    def __eq__(self, other):
+        """Return true if the genes are equal."""
+        return self.genes == other.genes
+    def __ne__(self, other):
+        """Return true if the genes are not equal."""
+        return self.genes != other.genes
