@@ -178,7 +178,7 @@ ga = modified_pyeasyga.GeneticAlgorithm(
   generations = 10000,
   crossover_probability = 0.3,
   mutation_probability = 0.3,
-  elitism = True,
+  elitism = False,
 )
 ga.tournament_size = 3
 ga.tournament_selection = tourament_selection

@@ -136,7 +136,7 @@ class GeneticAlgorithm(object):
         """
         new_population = []
         # Unlike the original implementation, we now allow the best 5% of the population to carry through
-        elites = [copy.deepcopy(self.current_generation[0]) for _ in range(int(0.05 * self.population_size))]
+        elites = [copy.deepcopy(self.current_generation[i]) for i in range(int(0.05 * self.population_size))]
         selection = self.selection_function
 
         while len(new_population) < self.population_size:
@@ -144,7 +144,7 @@ class GeneticAlgorithm(object):
             parent_2 = copy.deepcopy(selection(self.current_generation))
 
             child_1, child_2 = parent_1, parent_2
-            child_1.fitness, child_2.fitness = 0, 0
+            # child_1.fitness, child_2.fitness = 0, 0
 
             can_crossover = random.random() < self.crossover_probability
             can_mutate = True # random.random() < self.mutation_probability
@@ -158,17 +158,23 @@ class GeneticAlgorithm(object):
                 new_child12 = copy.deepcopy(child_1)
                 new_child21 = copy.deepcopy(child_2)
                 new_child22 = copy.deepcopy(child_2)
-                new_children = [new_child11, new_child12, new_child21, new_child22]
-                for child in new_children:
-                    child.fitness = self.fitness_function(child.genes)
+                # new_children = [new_child11, new_child12, new_child21, new_child22]
+                #for child in new_children:
+                #    child.fitness = self.fitness_function(child.genes)
                 # new_child11.fitness, new_child12.fitness, new_child21.fitness, new_child22.fitness = 0, 0, 0, 0
                 # Each parent mutation spawns 3 children
                 lOfGenes1 = (child_1.genes, new_child11.genes, new_child12.genes)
+                lOfChild1 = [child_1, new_child11, new_child12]
                 self.mutate_function(lOfGenes1)
-                chosen_child1 = self.tournament_selection([child_1] + new_children[0:2])
+                for child in lOfChild1:
+                    child.fitness = self.fitness_function(child.genes)
+                chosen_child1 = self.tournament_selection(lOfChild1)
                 lOfGenes2 = (child_2.genes, new_child21.genes, new_child22.genes)
+                lOfChild2 = [child_2, new_child21, new_child22]
                 self.mutate_function(lOfGenes2)
-                chosen_child2 = self.tournament_selection([child_2] + new_children[2:4])
+                for child in lOfChild2:
+                    child.fitness = self.fitness_function(child.genes)
+                chosen_child2 = self.tournament_selection(lOfChild2)
                 # Delete all children not chosen
                 '''
                 for child in [child_1, child_2] + new_children:
@@ -247,7 +253,7 @@ class Chromosome(object):
         """Return initialised Chromosome representation in human readable form.
         """
         return repr((self.fitness, self.genes))
-    
+
     def __eq__(self, other):
         """Return true if the genes are equal."""
         return self.genes == other.genes
