@@ -8,6 +8,9 @@ This is a currently naive way to solve sudoku problems using genetic algorithms.
 ### If you're trying to optimize this in the fewest generations and runtime, why is the population size so small?
 Because I'm using elitism (that is, the best of 5% each generation are guarenteed to carry over to the next), it's better to get to the next generation so that those top candidates can crossover again. Also, if the generation size is massive (so massive that a solution could be found in a single digit number of generations) that's kind of cheating -- the goal is to solve puzzles in a low number of generations but doesn't take seconds for each generation.
 
+
+
+### Obligatory notice
 Uses and modifies pyeasyga which has the following license agreement:
 Copyright (c) 2014, Ayodeji Remi-Omosowon
 All rights reserved.
