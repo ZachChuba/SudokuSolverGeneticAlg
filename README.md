@@ -23,8 +23,8 @@ Child 2) Same as Child 1, except using columns
 Image Representation (source: https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks)
 ![image](https://user-images.githubusercontent.com/49295341/142952079-534bf620-4f4b-416e-8eaf-8acc23982913.png)
 
-The purpose for this unusual crossover function is to:
-Avoid the destruction of highly fit building blocks during crossover, which allows faster convergence.
+The purpose for this unusual crossover function is to
+avoid the destruction of highly fit building blocks during crossover, which allows faster convergence.
 
 ## Special Crossover
 In order to ensure that crossover heads closer to the correct solution instead of making no progress or going backwards, each parent generates 3 children, two of which are a mutated version of the crossover, the other is the unmutated crossover. A tournament (with size=3) is held, such that the highest-rated child is selected with p=.9 and the 2nd highest child is selected with p=.1. The child selected by the tournament makes it to the next generation.
