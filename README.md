@@ -1,12 +1,41 @@
 # SudokuSolverGeneticAlg
 
-This is a currently naive way to solve sudoku problems using genetic algorithms.
+This is scalable genetic algorithm for solving sudoku puzzles.
 
 # Methodology
+## Form
+Data is formatted as a 2d array, with each 3x3 sub-block a row in the array.
+
+## Start
+Fill each box that don't contain values with unique values that don't conflict with the rest of the block. This guarentees that one of the three rules (unique blocks) is satisfied
+
+## Fitness Function
+Given 3 boxes (3 rows or 27 values) and a metric (row, col), return the number of unique values in that metric (low 0, high 27)
+
+## Crossover
+We try to preserve the best blocks and shift the burden of creating population diversity to the mutation function.
+Two children are generated from two parents in the following way:
+Child 1) 
+  Each row (3 boxes on the same verticle) is rated from 0-27 (fitness function) based on the number of unique values in each row (27 is the best and means all rows have no duplicates within them)
+  The child takes the row of boxes from the parent with the highest score (or random if both scores are equal)
+Child 2) Same as Child 1, except using columns
+
+Image Representation (source: https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks)
+![image](https://user-images.githubusercontent.com/49295341/142952079-534bf620-4f4b-416e-8eaf-8acc23982913.png)
+
+The purpose for this unusual crossover function is to:
+Avoid the destruction of highly fit building blocks during crossover, which allows faster convergence.
+
+## Special Crossover
+In order to ensure that crossover heads closer to the correct solution instead of making no progress or going backwards, each parent generates 3 children, two of which are a mutated version of the crossover, the other is the unmutated crossover. A tournament (with size=3) is held, such that the highest-rated child is selected with p=.9 and the 2nd highest child is selected with p=.1. The child selected by the tournament makes it to the next generation.
+
+## Mutation
+Each sub-block (3x3) rolls a mutation based on the mutation probability
+Two values in the sub block (that weren't given in the initial problem) are randomly selected and swapped. Preserves the uniqueness of the block, which allows for faster convergence.
 
 # Reasoning
 ### If you're trying to optimize this in the fewest generations and runtime, why is the population size so small?
-Because I'm using elitism (that is, the best of 5% each generation are guarenteed to carry over to the next), it's better to get to the next generation so that those top candidates can crossover again. Also, if the generation size is massive (so massive that a solution could be found in a single digit number of generations) that's kind of cheating -- the goal is to solve puzzles in a low number of generations but doesn't take seconds for each generation.
+Because I'm using elitism (that is, the best of 5% each generation are guarenteed to carry over to the next), it's better to get to the next generation so that those top candidates can mutate and crossover again. Also, if the generation size is massive (so massive that a solution could be found in a single digit number of generations) that's kind of cheating -- the goal is to solve puzzles in a low number of generations but doesn't take seconds for each generation.
 
 
 
