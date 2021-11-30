@@ -136,7 +136,7 @@ class GeneticAlgorithm(object):
         """
         new_population = []
         # Unlike the original implementation, we now allow the best 5% of the population to carry through
-        elites = [copy.deepcopy(self.current_generation[i]) for i in range(int(0.05 * self.population_size))]
+        elites = [copy.deepcopy(self.current_generation[i]) for i in range(int(0.1 * self.population_size))]
         selection = self.selection_function
 
         while len(new_population) < self.population_size:
