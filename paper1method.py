@@ -198,6 +198,28 @@ print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
 {end_time-beg_time} seconds  produces
 This board: {ga.best_individual()[1]}''')
 
+def print_board_prettily(board):
+  '''
+  Print a representation of the sudoku board such that each row of board is one
+  box and each box is separated by | and _
+  '''
+  for l in range(SQRT_DIM):
+    for i in range(SQRT_DIM):
+      for j in range(SQRT_DIM):
+        for k in range(SQRT_DIM):
+          print(board[l*SQRT_DIM+j][i*SQRT_DIM+k], end=' ')
+          if k == 2:
+            print('|', end=' ')
+          if j == 2 and k == 2:
+            print()
+
+      if i == 2:
+        print('-----------------------')
+
+print_board_prettily(ga.best_individual()[1])
+
+
+
 # This is old code trying to use GUI's here in case I decide to use again
 """
 def main_gui_loop(board, finished=False):
