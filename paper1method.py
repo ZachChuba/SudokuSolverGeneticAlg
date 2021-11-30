@@ -2,7 +2,7 @@
 import random
 import modified_pyeasyga
 from operator import attrgetter
-import pygame
+# import pygame
 import numpy as np
 import time
 
@@ -174,6 +174,53 @@ parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]
            np.array([6,5,4,3,2,1,9,8,7,]),np.array([5,4,3,2,1,9,8,7,6,]),np.array([4,3,2,1,9,8,7,6,5,]),
            np.array([3,2,1,9,8,7,6,5,4,]),np.array([2,1,9,8,7,6,5,4,3,]),np.array([1,9,8,7,6,5,4,3,2,])])
 
+# Back to GA stuff
+ga = modified_pyeasyga.GeneticAlgorithm(
+  seed_data = BOARD_CHOICE,
+  population_size=150,
+  generations = 10000,
+  crossover_probability = 0.3,
+  mutation_probability = 0.3,
+  elitism = True,
+)
+ga.tournament_size = 3
+ga.tournament_selection = tourament_selection
+ga.create_individual = generate_initial_boxes
+ga.fitness_function = fitness_for_all
+# ga.selection_function = selection
+ga.mutate_function = mutate
+ga.cross_over_function = crossover
+beg_time = time.time()
+ga.run()
+end_time = time.time()
+
+print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
+{end_time-beg_time} seconds  produces
+This board: {ga.best_individual()[1]}''')
+
+# This is old code trying to use GUI's here in case I decide to use again
+"""
+def main_gui_loop(board, finished=False):
+  while True:
+    drawlines(board)
+    if not finished:
+      ga = modified_pyeasyga.GeneticAlgorithm(
+        seed_data = BOARD_CHOICE,
+        population_size=150,
+        generations = 10000,
+        crossover_probability = 0.3,
+        mutation_probability = 0.3,
+        elitism = True,
+      )
+      ga.tournament_size = 3
+      ga.tournament_selection = tourament_selection
+      ga.create_individual = generate_initial_boxes
+      ga.fitness_function = fitness_for_all
+      # ga.selection_function = selection
+      ga.mutate_function = mutate
+      ga.cross_over_function = crossover
+      ga.run()
+      main_gui_loop(ga.best_individual()[1], finished=True)
 # GUI for the game is here
 # Code is modified from this tutorial on pygame: https://data-flair.training/blogs/python-sudoku-game/
 
@@ -217,78 +264,7 @@ board = BOARD_CHOICE
 Window.fill((255,182,193))
 drawlines(board)
 pygame.display.update()
-'''
-ga = modified_pyeasyga.GeneticAlgorithm(
-  seed_data = BOARD_CHOICE,
-  population_size=150,
-  generations = 10000,
-  crossover_probability = 0.3,
-  mutation_probability = 0.3,
-  elitism = True,
-)
-ga.tournament_size = 3
-ga.tournament_selection = tourament_selection
-ga.create_individual = generate_initial_boxes
-ga.fitness_function = fitness_for_all
-# ga.selection_function = selection
-ga.mutate_function = mutate
-ga.cross_over_function = crossover
-beg_time = time.time()
-ga.run()
-end_time = time.time()
-
-
-print(f"{ga.best_individual()[0]} score in {ga.n_iterations} generations produces this board")
-'''
-def main_gui_loop(board, finished=False):
-  while True:
-    drawlines(board)
-    if not finished:
-      ga = modified_pyeasyga.GeneticAlgorithm(
-        seed_data = BOARD_CHOICE,
-        population_size=150,
-        generations = 10000,
-        crossover_probability = 0.3,
-        mutation_probability = 0.3,
-        elitism = True,
-      )
-      ga.tournament_size = 3
-      ga.tournament_selection = tourament_selection
-      ga.create_individual = generate_initial_boxes
-      ga.fitness_function = fitness_for_all
-      # ga.selection_function = selection
-      ga.mutate_function = mutate
-      ga.cross_over_function = crossover
-      ga.run()
-      main_gui_loop(ga.best_individual()[1], finished=True)
 
 main_gui_loop(BOARD_CHOICE)
-
 """
-# Back to GA stuff
-ga = modified_pyeasyga.GeneticAlgorithm(
-  seed_data = BOARD_CHOICE,
-  population_size=150,
-  generations = 10000,
-  crossover_probability = 0.3,
-  mutation_probability = 0.3,
-  elitism = True,
-)
-ga.tournament_size = 3
-ga.tournament_selection = tourament_selection
-ga.create_individual = generate_initial_boxes
-ga.fitness_function = fitness_for_all
-# ga.selection_function = selection
-ga.mutate_function = mutate
-ga.cross_over_function = crossover
-beg_time = time.time()
-ga.run()
-end_time = time.time()
 
-print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
-{end_time-beg_time} seconds  produces
-This board: {ga.best_individual()[1]}''')
-
-
-#print(crossover(parent1, parent2))
-"""

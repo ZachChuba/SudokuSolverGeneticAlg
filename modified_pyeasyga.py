@@ -187,7 +187,7 @@ class GeneticAlgorithm(object):
                 new_population.append(chosen_child2)
 
         if self.elitism:
-            new_population = elites + new_population[int(0.05 * self.population_size):]
+            new_population = elites + new_population[int(0.1 * self.population_size):]
 
         self.current_generation = new_population
 
