@@ -206,7 +206,8 @@ parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]
 def main(argv):
   acceptable = ['easy', 'medium', 'hard', 'random']
   if len(argv) >= 2 and argv[1] in acceptable:
-    response = requests.get(url=f'https://sugoku.herokuapp.com/board?difficulty={argv[1]}', headers = {'Content-Type': 'application/x-www-form-urlencoded'})
+    response = requests.get(url=f'https://sugoku.herokuapp.com/board?difficulty={argv[1]}',
+     headers = {'Content-Type': 'application/x-www-form-urlencoded'})
     response_json = json.loads(response.text)
     BOARD_CHOICE = rows_to_boxes(response_json['board'])
   else:
@@ -214,6 +215,7 @@ def main(argv):
 
   MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
 
+  # Mutate moved down b/c modifiable_cell redefined here
   def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3, MODIFIABLE_CELLS=MODIFIABLE_CELLS):
     for i in range(DIM):
       to_add = []
@@ -258,8 +260,8 @@ def main(argv):
   end_time = time.time()
 
   print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
-  {end_time-beg_time} seconds  produces
-  This board:''')
+{end_time-beg_time} seconds  produces
+This board:''')
   print_board_prettily(ga.best_individual()[1])
 
 
