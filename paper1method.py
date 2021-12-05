@@ -163,24 +163,7 @@ def modifiable_cell(board, DIM=9, SQRT_DIM=3):
         l[i].add(j)
   return l
 
-MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
-
-def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3):
-  for i in range(DIM):
-    to_add = []
-    for gene in lOfGenes:
-      if random.random() < PROB:
-        choice1 = random.choice([*MODIFIABLE_CELLS[i]])
-        # Ensure no duplicates
-        MODIFIABLE_CELLS[i].remove(choice1)
-        to_add.append(choice1)
-        choice2 = random.choice([*MODIFIABLE_CELLS[i]])
-        # Restore the modifiables
-        # Swap
-        gene[i][choice1], gene[i][choice2] = gene[i][choice2], gene[i][choice1]
-    for choice in to_add:
-      MODIFIABLE_CELLS[i].add(choice)
-  # return gene
+# MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
 
 def tourament_selection(population):
   members = random.sample(population, TOURNAMENT_SIZE)
@@ -229,6 +212,29 @@ def main(argv):
   else:
     BOARD_CHOICE = easy_board
 
+  MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
+
+  def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3, MODIFIABLE_CELLS=MODIFIABLE_CELLS):
+    for i in range(DIM):
+      to_add = []
+      for gene in lOfGenes:
+        if random.random() < PROB:
+          choice1 = random.choice([*MODIFIABLE_CELLS[i]])
+          # Ensure no duplicates
+          MODIFIABLE_CELLS[i].remove(choice1)
+          to_add.append(choice1)
+          if len(MODIFIABLE_CELLS[i]) == 0:
+            MODIFIABLE_CELLS[i].add(choice1)
+            break
+          choice2 = random.choice([*MODIFIABLE_CELLS[i]])
+          # Restore the modifiables
+          # Swap
+          gene[i][choice1], gene[i][choice2] = gene[i][choice2], gene[i][choice1]
+      for choice in to_add:
+        MODIFIABLE_CELLS[i].add(choice)
+    # return gene
+
+
   print(f'We start with the board:')
   print_board_prettily(BOARD_CHOICE)
   # Back to GA stuff
@@ -239,7 +245,7 @@ def main(argv):
     crossover_probability = 0.3,
     mutation_probability = 0.3,
     elitism = True,
-  )
+    )
   ga.tournament_size = 3
   ga.tournament_selection = tourament_selection
   ga.create_individual = generate_initial_boxes
