@@ -29,7 +29,9 @@ avoid the destruction of highly fit building blocks during crossover, which allo
 
 ## Special Crossover
 In order to ensure that crossover heads closer to the correct solution instead of making no progress or going backwards, each parent generates 3 children, two of which are a mutated version of the crossover, the other is the unmutated crossover. A tournament (with size=3) is held, such that the highest-rated child is selected with p=.9 and the 2nd highest child is selected with p=.1. The child selected by the tournament makes it to the next generation.
-### How this lowers number of generations
+### How this lowers number of generations [source](https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks)
+
+
 ![image](https://user-images.githubusercontent.com/49295341/144790771-8a154393-c042-408c-baa9-3f272b40099c.png)
 
 
@@ -48,7 +50,9 @@ Two values in the sub block (that weren't given in the initial problem) are rand
 ### Example Hard (lucky):
 ![ga_solver_hard](https://user-images.githubusercontent.com/49295341/144789511-91bc9748-bc37-42f0-960d-02ea3beedccf.PNG)
 
-### Averages (sourced from paper referenced above):
+### Averages [source](https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks):
+Count = Number of trials that solved the problem in <=100,000 generations
+Avergage = Average number of generations
 
 ![image](https://user-images.githubusercontent.com/49295341/144789308-9a71b197-f31e-4fda-a6dd-8fbe0e68eb74.png)
 
