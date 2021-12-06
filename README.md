@@ -2,6 +2,14 @@
 
 This is scalable genetic algorithm for solving sudoku puzzles.
 
+# How To Use
+1) Clone the repository
+2) Run python solver.py in the root directory
+3) Optional argument: easy, medium, hard, random
+4) Using the optional argument will generate a puzzle of the selected, show you it, difficulty and solve it
+5) Example: python solver.py medium
+Solver is not cpython optimized -- much slower than is possible. On my Desktop's i7 cpu can run ~17.5 generations/sec
+
 # Methodology
 ## Form
 Data is formatted as a 2d array, with each 3x3 sub-block a row in the array.
