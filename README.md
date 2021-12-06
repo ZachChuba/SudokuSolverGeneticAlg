@@ -56,7 +56,8 @@ Avergage = Average number of generations
 
 ![image](https://user-images.githubusercontent.com/49295341/144789308-9a71b197-f31e-4fda-a6dd-8fbe0e68eb74.png)
 
-
+### How mine differs
+Because I use elitism (top 5% of previous generation guarenteed to be carried over), I converge faster for easier problems (>=26 given numbers), but converge slower for super hard problems because it takes longer to get out of local maxima. A method to solve this is toggle Elitism based on # givens.
 
 ## Reasoning
 ### If you're trying to optimize this in the fewest generations and runtime, why is the population size so small?
