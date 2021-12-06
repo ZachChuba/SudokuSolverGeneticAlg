@@ -4,7 +4,10 @@ import modified_pyeasyga
 from operator import attrgetter
 # import pygame
 import numpy as np
+import sys
 import time
+import json
+import requests
 
 # Each array is a box of the sudoku
 # The first box is top left, the second is middle top, etc.
@@ -13,7 +16,7 @@ SQRT_DIM = int(DIM**0.5)
 TOURNAMENT_SIZE = 3
 TOURNAMENT_PROB = .9
 random.seed(time.time())
-easy_board = [0,0,0,8,0,0,0,0,7,3,0,0,0,4,7,0,0,0,8,0,1,0,0,2,3,
+random_board = [0,0,0,8,0,0,0,0,7,3,0,0,0,4,7,0,0,0,8,0,1,0,0,2,3,
 6,0,0,6,0,0,0,8,0,0,2,0,0,5,9,2,4,7,0,0,2,0,0,6,0,0,0,3,0,0,8,4,7,0,0,2,0,1,
 0,0,0,2,1,0,0,0,8,5,0,0,0,0,6,0,0,0]
 easy_board = [[0,0,4,6,7,0,5,0,8],[8,0,0,9,0,0,0,3,0],
@@ -45,6 +48,31 @@ def generate_initial_boxes(given_puzzle, DIM=9, SQRT_DIM=3):
           board[i//2].append(element)
       counted = set()
   return board
+
+def rows_to_boxes(board):
+  newboard = []
+  for i in range(SQRT_DIM):
+    for j in range(SQRT_DIM):
+      for k in range(SQRT_DIM):
+        for l in range(SQRT_DIM):
+          newboard.append(board[i*SQRT_DIM+k][j*SQRT_DIM+l])
+  newbox2d = []
+  for i in range(DIM):
+    newbox2d.append(newboard[i*DIM:(i+1)*DIM])
+  return newbox2d
+
+
+def cols_to_boxes(board):
+  newboard = []
+  for i in range(SQRT_DIM):
+    for j in range(SQRT_DIM):
+      for k in range(SQRT_DIM):
+        for l in range(SQRT_DIM):
+          newboard.append(board[j*SQRT_DIM+l][i*SQRT_DIM+k])
+  newbox2d = []
+  for i in range(DIM):
+    newbox2d.append(newboard[i*DIM:(i+1)*DIM])
+  return newbox2d
 
 def fitness_rows(board, row, DIM=9, SQRT_DIM=3):
   fitness = []
@@ -135,24 +163,7 @@ def modifiable_cell(board, DIM=9, SQRT_DIM=3):
         l[i].add(j)
   return l
 
-MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
-
-def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3):
-  for i in range(DIM):
-    to_add = []
-    for gene in lOfGenes:
-      if random.random() < PROB:
-        choice1 = random.choice([*MODIFIABLE_CELLS[i]])
-        # Ensure no duplicates
-        MODIFIABLE_CELLS[i].remove(choice1)
-        to_add.append(choice1)
-        choice2 = random.choice([*MODIFIABLE_CELLS[i]])
-        # Restore the modifiables
-        # Swap
-        gene[i][choice1], gene[i][choice2] = gene[i][choice2], gene[i][choice1]
-    for choice in to_add:
-      MODIFIABLE_CELLS[i].add(choice)
-  # return gene
+# MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
 
 def tourament_selection(population):
   members = random.sample(population, TOURNAMENT_SIZE)
@@ -162,41 +173,6 @@ def tourament_selection(population):
     return members[0]
   else:
     return members[1]
-
-
-
-test_boxes = [[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],[7,8,9,1,2,3,4,5,6,]]
-
-parent1 = np.array([[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],[7,8,9,1,2,3,4,5,6,],
-           [9,1,2,3,4,5,6,7,8,],[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],
-           [7,8,9,1,2,3,4,5,6,],[9,1,2,3,4,5,6,7,8,],[1,2,3,4,5,6,7,8,9,]])
-parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]),np.array([7,6,5,4,3,2,1,9,8,]),
-           np.array([6,5,4,3,2,1,9,8,7,]),np.array([5,4,3,2,1,9,8,7,6,]),np.array([4,3,2,1,9,8,7,6,5,]),
-           np.array([3,2,1,9,8,7,6,5,4,]),np.array([2,1,9,8,7,6,5,4,3,]),np.array([1,9,8,7,6,5,4,3,2,])])
-
-# Back to GA stuff
-ga = modified_pyeasyga.GeneticAlgorithm(
-  seed_data = BOARD_CHOICE,
-  population_size=150,
-  generations = 10000,
-  crossover_probability = 0.3,
-  mutation_probability = 0.3,
-  elitism = True,
-)
-ga.tournament_size = 3
-ga.tournament_selection = tourament_selection
-ga.create_individual = generate_initial_boxes
-ga.fitness_function = fitness_for_all
-# ga.selection_function = selection
-ga.mutate_function = mutate
-ga.cross_over_function = crossover
-beg_time = time.time()
-ga.run()
-end_time = time.time()
-
-print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
-{end_time-beg_time} seconds  produces
-This board: {ga.best_individual()[1]}''')
 
 def print_board_prettily(board):
   '''
@@ -216,7 +192,77 @@ def print_board_prettily(board):
       if i == 2:
         print('-----------------------')
 
-print_board_prettily(ga.best_individual()[1])
+
+
+test_boxes = [[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],[7,8,9,1,2,3,4,5,6,]]
+
+parent1 = np.array([[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],[7,8,9,1,2,3,4,5,6,],
+           [9,1,2,3,4,5,6,7,8,],[1,2,3,4,5,6,7,8,9,],[4,5,6,7,8,9,1,2,3,],
+           [7,8,9,1,2,3,4,5,6,],[9,1,2,3,4,5,6,7,8,],[1,2,3,4,5,6,7,8,9,]])
+parent2 = np.array([np.array([9,8,7,6,5,4,3,2,1,]),np.array([8,7,6,5,4,3,2,1,9,]),np.array([7,6,5,4,3,2,1,9,8,]),
+           np.array([6,5,4,3,2,1,9,8,7,]),np.array([5,4,3,2,1,9,8,7,6,]),np.array([4,3,2,1,9,8,7,6,5,]),
+           np.array([3,2,1,9,8,7,6,5,4,]),np.array([2,1,9,8,7,6,5,4,3,]),np.array([1,9,8,7,6,5,4,3,2,])])
+
+def main(argv):
+  acceptable = ['easy', 'medium', 'hard', 'random']
+  if len(argv) >= 2 and argv[1] in acceptable:
+    response = requests.get(url=f'https://sugoku.herokuapp.com/board?difficulty={argv[1]}',
+     headers = {'Content-Type': 'application/x-www-form-urlencoded'})
+    response_json = json.loads(response.text)
+    BOARD_CHOICE = rows_to_boxes(response_json['board'])
+  else:
+    BOARD_CHOICE = easy_board
+
+  MODIFIABLE_CELLS = modifiable_cell(BOARD_CHOICE)
+
+  # Mutate moved down b/c modifiable_cell redefined here
+  def mutate(lOfGenes, PROB=.3, DIM=9, SQRT_DIM=3, MODIFIABLE_CELLS=MODIFIABLE_CELLS):
+    for i in range(DIM):
+      to_add = []
+      for gene in lOfGenes:
+        if random.random() < PROB:
+          choice1 = random.choice([*MODIFIABLE_CELLS[i]])
+          # Ensure no duplicates
+          MODIFIABLE_CELLS[i].remove(choice1)
+          to_add.append(choice1)
+          if len(MODIFIABLE_CELLS[i]) == 0:
+            MODIFIABLE_CELLS[i].add(choice1)
+            break
+          choice2 = random.choice([*MODIFIABLE_CELLS[i]])
+          # Restore the modifiables
+          # Swap
+          gene[i][choice1], gene[i][choice2] = gene[i][choice2], gene[i][choice1]
+      for choice in to_add:
+        MODIFIABLE_CELLS[i].add(choice)
+    # return gene
+
+
+  print(f'We start with the board:')
+  print_board_prettily(BOARD_CHOICE)
+  # Back to GA stuff
+  ga = modified_pyeasyga.GeneticAlgorithm(
+    seed_data = BOARD_CHOICE,
+    population_size=150,
+    generations = 10000,
+    crossover_probability = 0.3,
+    mutation_probability = 0.3,
+    elitism = True,
+    )
+  ga.tournament_size = 3
+  ga.tournament_selection = tourament_selection
+  ga.create_individual = generate_initial_boxes
+  ga.fitness_function = fitness_for_all
+  # ga.selection_function = selection
+  ga.mutate_function = mutate
+  ga.cross_over_function = crossover
+  beg_time = time.time()
+  ga.run()
+  end_time = time.time()
+
+  print(f'''{ga.best_individual()[0]} score in {ga.n_iterations} in generations in
+{end_time-beg_time} seconds  produces
+This board:''')
+  print_board_prettily(ga.best_individual()[1])
 
 
 
@@ -290,3 +336,5 @@ pygame.display.update()
 main_gui_loop(BOARD_CHOICE)
 """
 
+if __name__ == '__main__':
+  main(sys.argv)
