@@ -33,10 +33,23 @@ In order to ensure that crossover heads closer to the correct solution instead o
 Each sub-block (3x3) rolls a mutation based on the mutation probability
 Two values in the sub block (that weren't given in the initial problem) are randomly selected and swapped. Preserves the uniqueness of the block, which allows for faster convergence.
 
-# Reasoning
+## Results
+
+Example Easy: ![ga_solver_easy](https://user-images.githubusercontent.com/49295341/144789430-6da88db9-b383-4dcc-af96-18c45f872f01.PNG)
+
+Example Medium: ![ga_solver_medium](https://user-images.githubusercontent.com/49295341/144789466-fe8cfdf2-7a01-468f-823c-d2ff21060fa2.PNG)
+
+Example Hard (lucky): ![ga_solver_hard](https://user-images.githubusercontent.com/49295341/144789511-91bc9748-bc37-42f0-960d-02ea3beedccf.PNG)
+
+Averages (sourced from paper referenced above):
+
+![image](https://user-images.githubusercontent.com/49295341/144789308-9a71b197-f31e-4fda-a6dd-8fbe0e68eb74.png)
+
+
+
+## Reasoning
 ### If you're trying to optimize this in the fewest generations and runtime, why is the population size so small?
 Because I'm using elitism (that is, the best of 5% each generation are guarenteed to carry over to the next), it's better to get to the next generation so that those top candidates can mutate and crossover again. Also, if the generation size is massive (so massive that a solution could be found in a single digit number of generations) that's kind of cheating -- the goal is to solve puzzles in a low number of generations but doesn't take seconds for each generation.
-
 
 
 ### Obligatory notice
