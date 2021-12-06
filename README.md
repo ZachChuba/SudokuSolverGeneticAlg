@@ -35,13 +35,16 @@ Two values in the sub block (that weren't given in the initial problem) are rand
 
 ## Results
 
-Example Easy: ![ga_solver_easy](https://user-images.githubusercontent.com/49295341/144789430-6da88db9-b383-4dcc-af96-18c45f872f01.PNG)
+### Example Easy:
+![ga_solver_easy](https://user-images.githubusercontent.com/49295341/144789430-6da88db9-b383-4dcc-af96-18c45f872f01.PNG)
 
-Example Medium: ![ga_solver_medium](https://user-images.githubusercontent.com/49295341/144789466-fe8cfdf2-7a01-468f-823c-d2ff21060fa2.PNG)
+### Example Medium:
+![ga_solver_medium](https://user-images.githubusercontent.com/49295341/144789466-fe8cfdf2-7a01-468f-823c-d2ff21060fa2.PNG)
 
-Example Hard (lucky): ![ga_solver_hard](https://user-images.githubusercontent.com/49295341/144789511-91bc9748-bc37-42f0-960d-02ea3beedccf.PNG)
+### Example Hard (lucky):
+![ga_solver_hard](https://user-images.githubusercontent.com/49295341/144789511-91bc9748-bc37-42f0-960d-02ea3beedccf.PNG)
 
-Averages (sourced from paper referenced above):
+### Averages (sourced from paper referenced above):
 
 ![image](https://user-images.githubusercontent.com/49295341/144789308-9a71b197-f31e-4fda-a6dd-8fbe0e68eb74.png)
 
