@@ -20,7 +20,8 @@ Child 1)
   The child takes the row of boxes from the parent with the highest score (or random if both scores are equal)
 Child 2) Same as Child 1, except using columns
 
-Image Representation (source: https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks)
+### Image Representation ![source](https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks)
+
 ![image](https://user-images.githubusercontent.com/49295341/142952079-534bf620-4f4b-416e-8eaf-8acc23982913.png)
 
 The purpose for this unusual crossover function is to
