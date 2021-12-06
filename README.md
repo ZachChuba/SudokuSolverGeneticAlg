@@ -56,7 +56,7 @@ Two values in the sub block (that weren't given in the initial problem) are rand
 ### Example Medium:
 ![ga_solver_medium](https://user-images.githubusercontent.com/49295341/144789466-fe8cfdf2-7a01-468f-823c-d2ff21060fa2.PNG)
 
-### Example Hard (lucky):
+### Example Hard:
 ![ga_solver_hard](https://user-images.githubusercontent.com/49295341/144789511-91bc9748-bc37-42f0-960d-02ea3beedccf.PNG)
 
 ### Averages [source](https://www.researchgate.net/publication/224180108_Solving_Sudoku_with_genetic_operations_that_preserve_building_blocks):
