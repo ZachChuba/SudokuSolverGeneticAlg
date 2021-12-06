@@ -29,6 +29,9 @@ avoid the destruction of highly fit building blocks during crossover, which allo
 
 ## Special Crossover
 In order to ensure that crossover heads closer to the correct solution instead of making no progress or going backwards, each parent generates 3 children, two of which are a mutated version of the crossover, the other is the unmutated crossover. A tournament (with size=3) is held, such that the highest-rated child is selected with p=.9 and the 2nd highest child is selected with p=.1. The child selected by the tournament makes it to the next generation.
+### How this lowers number of generations
+![image](https://user-images.githubusercontent.com/49295341/144790771-8a154393-c042-408c-baa9-3f272b40099c.png)
+
 
 ## Mutation
 Each sub-block (3x3) rolls a mutation based on the mutation probability
