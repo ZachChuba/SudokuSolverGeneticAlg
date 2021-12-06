@@ -8,7 +8,8 @@ This is scalable genetic algorithm for solving sudoku puzzles.
 3) Optional argument: easy, medium, hard, random
 4) Using the optional argument will generate a puzzle of the selected, show you it, difficulty and solve it
 5) Example: python solver.py medium
-Solver is not cpython optimized -- much slower than is possible. On my Desktop's i7 cpu can run ~17.5 generations/sec
+
+Note: Solver is not cpython optimized -- much slower than is possible. On my Desktop's i7 cpu can run ~17.5 generations/sec
 
 # Methodology
 ## Form
